@@ -47,7 +47,7 @@ public class Bullet_Hit_Script : MonoBehaviour {
             {
                 if (refMap.GetPixel(tempX + i, tempY + j).a != 0 && Vector2.Distance(new Vector2(tempX, tempY), new Vector2(tempX + i, tempY + j)) < 30)
                 {
-                    refMap.SetPixel(tempX + i, tempY + j, Color.white);
+                    refMap.SetPixel(tempX + i, tempY + j, refMap.GetPixel(tempX + i, tempY + j).linear + Color.white*12/ Vector2.Distance(new Vector2(tempX, tempY), new Vector2(tempX + i, tempY + j)));
                 }
             }
         }

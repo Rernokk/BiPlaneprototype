@@ -54,7 +54,7 @@
 				fixed4 wreck = tex2D(_WeatherTex, i.uv);
 
 				fixed4 col = base * (1 - weight) + (wreck * weight);
-
+				//col = tex2D(_Damage, i.uv);
 				return col;
 			}
 			ENDCG
