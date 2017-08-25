@@ -1,13 +1,18 @@
-﻿Shader "Hidden/Weathering_Shader"
+﻿Shader "_Custom_Shaders/Weathering_Shader"
 {
 	Properties
 	{
-		_MainTex ("Texture", 2D) = "white" {}
+		_Base ("Base", 2D) = "white" {}
+		_WeatherTex("Wrecked", 2D) = "white" {}
+		_Alpha("Alpha", 2D) = "white" {}
+		_Damage("Damage Map", 2D) = "white" {}
 	}
 	SubShader
 	{
+		Tags {"RenderType" = "Transparent" "Queue" = "Transparent" }
 		// No culling or depth
 		Cull Off ZWrite Off ZTest Always
+		Blend SrcAlpha OneMinusSrcAlpha
 
 		Pass
 		{
@@ -37,13 +42,19 @@
 				return o;
 			}
 			
-			sampler2D _MainTex;
+			sampler2D _Base;
+			sampler2D _WeatherTex;
+			sampler2D _Alpha;
+			sampler2D _Damage;
 
 			fixed4 frag (v2f i) : SV_Target
 			{
-				fixed4 col = tex2D(_MainTex, i.uv);
-				// just invert the colors
-				col = 1 - col;
+				fixed4 base = tex2D(_Base, i.uv);
+				fixed4 weight = tex2D(_Damage, i.uv);
+				fixed4 wreck = tex2D(_WeatherTex, i.uv);
+
+				fixed4 col = base * (1 - weight) + (wreck * weight);
+
 				return col;
 			}
 			ENDCG
